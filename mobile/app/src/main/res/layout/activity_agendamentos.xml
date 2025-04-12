@@ -7,13 +7,38 @@
     android:layout_height="match_parent"
     tools:context=".AgendamentosActivity">
 
-    <TextView
-        android:id="@+id/textView5"
+    <ProgressBar
+    android:id="@+id/progressBar"
+         style="?android:attr/progressBarStyle"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+       android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnAgendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="339dp"
-        android:text="CHEGUEI AQUI"
+        android:layout_marginTop="58dp"
+        android:layout_marginBottom="1dp"
+        android:text="Agendar"
+        app:layout_constraintBottom_toTopOf="@+id/idAgendamentos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.084" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idAgendamentos"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAgendar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

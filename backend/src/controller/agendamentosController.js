@@ -26,7 +26,7 @@ servidor.post('/agendamentos', async (req, res) => {
 });
 
 // Rota para exibir os agendamentos de um cliente
-servidor.get('/agendamentos/cliente', async (req, res) => {
+servidor.post('/agendamentos/cliente', async (req, res) => {
     try {
         const cpf = req.body;
         const agendamentos = await exibirAgendamentoCliente(cpf);

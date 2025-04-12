@@ -159,9 +159,9 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    val usuarioId: Int,
-    val usuarioNome: String,
-    val usuarioEmail: String,
-    val usuarioSenha: String,
+    val ID: Int,
+    val NOME: String,
+    val EMAIL: String,
+    val SENHA: String,
     val CPF: String
 )
