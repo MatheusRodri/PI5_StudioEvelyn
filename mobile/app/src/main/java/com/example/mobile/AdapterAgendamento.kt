@@ -1,6 +1,6 @@
 package com.example.mobile
 
-// Imports existentes (mantidos)
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +11,9 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.OffsetDateTime
 import java.util.Locale
+import java.text.NumberFormat
 
-// Import para formatação de moeda
-import java.text.NumberFormat // <<< ADICIONADO import
 
-// 1. Construtor do Adapter (sem alterações)
 class AdapterAgendamento(private var agendamentos: List<AgendamentoResponse>) :
     RecyclerView.Adapter<AdapterAgendamento.AgendamentoViewHolder>() {
 

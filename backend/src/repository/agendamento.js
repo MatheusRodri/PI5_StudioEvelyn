@@ -28,7 +28,7 @@ export async function criarAgendamento(agendamento) {
         const resp = await con.query(comando, valores);
 
 
-        return { id: resp.insertId, ...agendamento };
+        return { message: "Agendamento realizado com sucesso !" };
     } catch (error) {
         throw new Error(error.message);
     }

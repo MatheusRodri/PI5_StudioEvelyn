@@ -113,7 +113,9 @@ class MainActivity : AppCompatActivity() {
 
 
             var intensao = Intent(this, AgendamentosActivity::class.java)
+            Log.d("Login", usuarioLogado.ID.toString())
             intensao.putExtra("CPF",usuarioLogado.CPF)
+            intensao.putExtra("ID_Cliente",usuarioLogado.ID.toString())
             startActivity(intensao)
             finish()
         } else {

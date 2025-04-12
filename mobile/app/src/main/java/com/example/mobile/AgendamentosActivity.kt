@@ -69,6 +69,7 @@ class AgendamentosActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAgendamentosBinding
     private lateinit var adapterAgendamento: AdapterAgendamento // Seu adapter externo
     private var clienteCpf: String? = null
+    private var clienteId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +78,8 @@ class AgendamentosActivity : AppCompatActivity() {
         binding = ActivityAgendamentosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        clienteCpf = intent.getStringExtra("CPF") // Busca CPF (String)
+        clienteCpf = intent.getStringExtra("CPF")
+        clienteId = intent.getStringExtra("ID_Cliente")
 
         Log.d("AgendamentosActivity", "CPF Recebido: $clienteCpf")
 
@@ -96,7 +98,8 @@ class AgendamentosActivity : AppCompatActivity() {
     private fun setupAgendarButton() {
         binding.btnAgendar.setOnClickListener {
             val intensao = Intent(this, AgendamentoActivity::class.java)
-            intensao.putExtra("CPF", clienteCpf) // Passa CPF (String)
+            Log.e("AgendamentosActivityEnvia", clienteId.toString())
+            intensao.putExtra("ID", clienteId)
             startActivity(intensao)
         }
     }
