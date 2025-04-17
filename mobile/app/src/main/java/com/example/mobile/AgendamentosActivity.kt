@@ -10,8 +10,7 @@ import androidx.core.view.isVisible // Import for easy visibility toggle
 import androidx.lifecycle.lifecycleScope // Import for coroutines
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobile.databinding.ActivityAgendamentosBinding
-// Import SerializedName
-import com.google.gson.annotations.SerializedName // <-- IMPORTANTE: Adicionar este import
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.launch // Import launch
 import retrofit2.HttpException // Import for HTTP errors
 import retrofit2.Retrofit
@@ -19,13 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import java.io.IOException
-import java.sql.Time
-import java.util.Date
 
-
-// --- Data Classes ---
-
-// Response: Já está correta, esperando "CPF" (maiúsculo) da API
 data class AgendamentoResponse(
     val ID: Int,
     val NOME: String?,
@@ -35,7 +28,9 @@ data class AgendamentoResponse(
     val HORA: String?, // <<< MUDADO para String?
     val VALOR: Float,
     val PROCEDIMENTO: String?,
-    val TP_PAGAMENTO: String?
+    val TP_PAGAMENTO: String?,
+    val ID_AGENDAMENTO: Int,
+    val ID_CLIENTE: Int
 )
 
 // Request: CORRIGIDO para ENVIAR "CPF" (maiúsculo) no JSON
@@ -151,5 +146,9 @@ class AgendamentosActivity : AppCompatActivity() {
                 adapterAgendamento.updateData(emptyList())
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        fetchAgendamentosFromApi() // <- sua função que recarrega os dados
     }
 }

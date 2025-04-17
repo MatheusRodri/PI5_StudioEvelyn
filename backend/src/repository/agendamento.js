@@ -53,6 +53,7 @@ export async function exibirAgendamentoCliente(cpf) {
 
 export async function excluirAgendamento(id) {
     try {
+        console.log("ID: ",id)
         const comando = `DELETE FROM AGENDAMENTOS WHERE ID = ?`;
         const valores = [id.ID];
         const resp = await con.query(comando, valores);
@@ -64,11 +65,12 @@ export async function excluirAgendamento(id) {
 
 // Função para atualizar um agendamento
 export async function atualizarAgendamento(agendamento) {
+    console.log(agendamento)
     try {
         const comando = `UPDATE AGENDAMENTOS SET DATA = ?, HORA = ?, VALOR = ?, PROCEDIMENTO = ?, TP_PAGAMENTO = ? WHERE ID = ? AND ID_CLIENT = ?`;
-        const valores = [agendamento.DATA, agendamento.HORA, agendamento.VALOR, agendamento.PROCEDIMENTO, agendamento.TP_PAGAMENTO, agendamento.ID_CLIENT, agendamento.ID];
+        const valores = [agendamento.DATA, agendamento.HORA, agendamento.VALOR, agendamento.PROCEDIMENTO, agendamento.TP_PAGAMENTO, agendamento.ID, agendamento.ID_CLIENT];
         const resp = await con.query(comando, valores);
-        return {  message:"Procedimento atualizado com sucesso!", id: agendamento.ID, ...agendamento };
+        return {  message:"Procedimento atualizado com sucesso!"};
     } catch (error) {
         throw new Error(error.message);
     }

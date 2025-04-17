@@ -8,7 +8,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.RadioButton // Importação necessária para RadioButton
 import android.widget.RadioGroup
-import android.widget.Toast // Pode ser usado para mensagens rápidas, se necessário
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog // Para exibir alertas ao usuário
 import androidx.appcompat.app.AppCompatActivity
@@ -72,7 +71,7 @@ object NetworkConfigAgendamento {
 
 // Interface que define os endpoints da API para Agendamento
 interface ApiServiceAgendamentoCli {
-    @POST("agendamentos") // Endpoint para criar novos agendamentos (método POST)
+    @POST("agendamentos")
     fun criarAgendamento(@Body request: AgendamentoRequest): Call<AgendamentoCliResponse> // Define o método da API
 }
 
@@ -145,13 +144,13 @@ class AgendamentoActivity : AppCompatActivity() {
 
 
         // Inicializa as Views encontrando-as pelo ID no layout XML
-        editTextDate = findViewById(R.id.editTextDate)
-        editTextTime = findViewById(R.id.editTextTime)
+        editTextDate = findViewById(R.id.editDataAtualiza)
+        editTextTime = findViewById(R.id.editHoraAtualiza)
         radioGroupPagamento = findViewById(R.id.radioGroup)
-        checkBoxBrasileiro = findViewById(R.id.checkBox)
-        checkBoxCombo = findViewById(R.id.checkBox2)
-        checkBoxDesign = findViewById(R.id.checkBox3)
-        btnAgendar = findViewById(R.id.idBtnAgendar)
+        checkBoxBrasileiro = findViewById(R.id.chkBrasileiro)
+        checkBoxCombo = findViewById(R.id.chkCombo)
+        checkBoxDesign = findViewById(R.id.chkDesign)
+        btnAgendar = findViewById(R.id.idBtnAgendarAtualizar)
 
         // Configura o listener de clique para o botão "Agendar"
         btnAgendar.setOnClickListener {

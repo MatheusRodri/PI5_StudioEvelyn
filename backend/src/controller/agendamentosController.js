@@ -38,7 +38,9 @@ servidor.post('/agendamentos/cliente', async (req, res) => {
 
 
 // Rota para excluir um agendamento
-servidor.delete('/agendamentos', async (req, res) => {
+servidor.post('/agendamentos/excluir', async (req, res) => {
+    console.log("entrou na rota excluir agendamento")
+    console.log(req.body)
     try {
         const id = req.body;
         const resposta = await excluirAgendamento(id);
@@ -49,7 +51,8 @@ servidor.delete('/agendamentos', async (req, res) => {
 });
 
 // Rota para atualizar um agendamento
-servidor.put('/agendamentos', async (req, res) => {
+servidor.post('/agendamentos/atualiza', async (req, res) => {
+    
     try {
         const agendamento = req.body;
         const resposta = await atualizarAgendamento(agendamento);
