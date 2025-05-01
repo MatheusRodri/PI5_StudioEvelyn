@@ -84,7 +84,7 @@ class AtualizaAgendamentoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_atualiza_agendamento)
+        setContentView(R.layout.activity_atualiza_agendamento_old)
 
         val id_agendamento = intent.getIntExtra("ID_AGENDAMENTO", -1)
         val id_cliente = intent.getIntExtra("ID_CLIENTE", -1)
@@ -95,7 +95,7 @@ class AtualizaAgendamentoActivity : AppCompatActivity() {
 
         Log.d("Atualiza", "id agendamento: $id_agendamento\nid_cliente: $id_cliente")
 
-        val edtData = findViewById<EditText>(R.id.editDataAtualiza)
+        val edtData = findViewById<EditText>(R.id.editData)
         val edtHora = findViewById<EditText>(R.id.editHoraAtualiza)
 
         val chkDinheiro = findViewById<RadioButton>(R.id.chkDinheiro)

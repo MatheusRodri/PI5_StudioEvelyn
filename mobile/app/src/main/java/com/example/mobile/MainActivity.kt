@@ -89,7 +89,9 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         handleLoginSuccess(response.body()!!)
                     } else {
-                        handleLoginError(response.code()) // Passar response.message() pode ser útil
+                        val errorBody = response.errorBody()?.string()
+                        Log.e(TAG, "Erro 500 recebido. Corpo do erro: $errorBody")
+                    //handleLoginError(response.code()) // Passar response.message() pode ser útil
                     }
                 }
 

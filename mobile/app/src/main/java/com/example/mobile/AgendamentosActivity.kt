@@ -121,12 +121,17 @@ class AgendamentosActivity : AppCompatActivity() {
                 binding.progressBar.isVisible = false
                 binding.idAgendamentos.isVisible = true
 
+                binding.txtSemAgendamentos.isVisible = response.isEmpty()
+
+
             } catch (e: IOException) {
                 Log.e("AgendamentosActivity", "Network Error: ${e.message}", e)
                 binding.progressBar.isVisible = false
                 binding.idAgendamentos.isVisible = true
                 Toast.makeText(this@AgendamentosActivity, "Erro de rede: Verifique sua conexão", Toast.LENGTH_LONG).show()
                 adapterAgendamento.updateData(emptyList())
+                binding.txtSemAgendamentos.isVisible = true
+
 
             } catch (e: HttpException) {
                 Log.e("AgendamentosActivity", "HTTP Error: ${e.code()} - ${e.message()}", e)
@@ -137,6 +142,8 @@ class AgendamentosActivity : AppCompatActivity() {
                 binding.idAgendamentos.isVisible = true
                 Toast.makeText(this@AgendamentosActivity, "Erro ao buscar dados: ${e.code()}", Toast.LENGTH_LONG).show()
                 adapterAgendamento.updateData(emptyList())
+                binding.txtSemAgendamentos.isVisible = true
+
 
             } catch (e: Exception) { // Inclui possíveis erros de conversão do Gson (ex: Date/Time)
                 Log.e("AgendamentosActivity", "Unexpected Error: ${e.message}", e)
@@ -144,6 +151,8 @@ class AgendamentosActivity : AppCompatActivity() {
                 binding.idAgendamentos.isVisible = true
                 Toast.makeText(this@AgendamentosActivity, "Ocorreu um erro inesperado", Toast.LENGTH_LONG).show()
                 adapterAgendamento.updateData(emptyList())
+                binding.txtSemAgendamentos.isVisible = true
+
             }
         }
     }

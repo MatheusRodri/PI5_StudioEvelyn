@@ -1,0 +1,6 @@
+<!-- res/drawable/round_border.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#C30C6B" /> <!-- Cor da borda -->
+    <corners android:radius="20dp" /> <!-- Raio da borda arredondada -->
+    <stroke android:color="#ffffff" android:width="3dp" /> <!-- Cor e espessura da borda -->
+</shape>

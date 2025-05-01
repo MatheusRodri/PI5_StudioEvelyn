@@ -144,7 +144,7 @@ class AgendamentoActivity : AppCompatActivity() {
 
 
         // Inicializa as Views encontrando-as pelo ID no layout XML
-        editTextDate = findViewById(R.id.editDataAtualiza)
+        editTextDate = findViewById(R.id.editData)
         editTextTime = findViewById(R.id.editHoraAtualiza)
         radioGroupPagamento = findViewById(R.id.radioGroup)
         checkBoxBrasileiro = findViewById(R.id.chkBrasileiro)

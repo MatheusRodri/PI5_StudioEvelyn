@@ -5,115 +5,103 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/linear_background"
     tools:context=".CadastroActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewCadastro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="86dp"
-        android:layout_marginBottom="97dp"
-        android:text="Cadsstro"
-        app:layout_constraintBottom_toTopOf="@+id/txtFirstName"
+        android:text="@string/cadastro"
+        android:textColor="#C30C6B"
+        android:textSize="50sp"
+        android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txtSenhaNew"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:hint="Senha"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/txtSenhaNewConfirme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmailNew" />
-
-    <EditText
-        android:id="@+id/txtSenhaNewConfirme"
-        android:layout_width="288dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
-        android:ems="10"
-        android:hint="Confirme a senha"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/btnSingup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSenhaNew" />
-
-    <EditText
         android:id="@+id/txtFirstName"
-        android:layout_width="288dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="27dp"
-        android:ems="10"
-        android:hint="Primeiro Nome"
+        style="@style/EditTextDefault"
+        android:hint="@string/primeiro_nome"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/txtLastName"
+        android:autofillHints="name"
+        app:layout_constraintBottom_toBottomOf="@id/txtLastName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <EditText
-        android:id="@+id/txtEmailNew"
-        android:layout_width="288dp"
-        android:layout_height="42dp"
-        android:ems="10"
-        android:hint="E-mail"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.567" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txtLastName"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginBottom="155dp"
-        android:ems="10"
-        android:hint="Segundo Nome"
+        style="@style/EditTextDefault"
+        android:hint="@string/ultimo_nome"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/txtSenhaNew"
+        android:autofillHints="name"
+        app:layout_constraintBottom_toBottomOf="@id/txtCPF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFirstName" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txtCPF"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginEnd="61dp"
-        android:ems="10"
-        android:hint="CPF"
+        style="@style/EditTextDefault"
+        android:hint="@string/cpf"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:autofillHints="name"
+        app:layout_constraintBottom_toBottomOf="@id/txtEmailNew"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.483" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/txtEmailNew"
+        style="@style/EditTextDefault"
+        android:hint="@string/e_mail"
+        android:inputType="textEmailAddress"
+        android:autofillHints="emailAddress"
+        app:layout_constraintBottom_toBottomOf="@id/txtSenhaNew"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/txtSenhaNew"
+        style="@style/EditTextDefault"
+        android:hint="@string/senha"
+        android:inputType="textPassword"
+        android:autofillHints="password"
+        app:layout_constraintBottom_toBottomOf="@id/txtSenhaNewConfirme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/txtSenhaNewConfirme"
+        style="@style/EditTextDefault"
+        android:hint="@string/confirme_a_senha"
+        android:inputType="textPassword"
+        android:autofillHints="password"
+        app:layout_constraintBottom_toBottomOf="@id/btnSingup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnSingup"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/criar_conta"
+        android:textColor="#C30C6B"
+        app:layout_constraintBottom_toBottomOf="@id/textJaTemLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textJaTemLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
-        android:text="Criar conta"
+        android:text="@string/temUmLogin"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSenhaNewConfirme" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

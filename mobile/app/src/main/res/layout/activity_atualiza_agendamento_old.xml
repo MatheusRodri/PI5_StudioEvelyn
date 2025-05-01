@@ -13,13 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Atualiza Agendamento"
-        app:layout_constraintBottom_toTopOf="@+id/editDataAtualiza"
+        app:layout_constraintBottom_toTopOf="@+id/editData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editDataAtualiza"
+        android:id="@+id/editData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -44,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editDataAtualiza" />
+        app:layout_constraintTop_toBottomOf="@+id/editData" />
 
     <RadioGroup
         android:id="@+id/radioGroup"

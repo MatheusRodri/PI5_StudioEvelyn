@@ -1,58 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/linear_background"
     tools:context=".MainActivity">
+
+    <!-- Título -->
+
+    <!-- Subtítulo Login -->
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="Studio\nEvelyn"
+        android:textColor="#A80063"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:text="LOGIN"
+        android:textColor="#FFFFFF"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtEmail"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.037" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+    <!-- Campo de Senha -->
 
     <EditText
         android:id="@+id/txtEmail"
-        android:layout_width="343dp"
+        android:layout_width="300dp"
         android:layout_height="46dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="64dp"
         android:ems="10"
-        android:hint="Email"
-        android:inputType="text"
-        android:text="adm@adm.com"
+        android:hint="E-mail"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/round_border"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#fff"
+        android:paddingStart="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
         android:id="@+id/txtPassword"
-        android:layout_width="346dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="43dp"
+        android:layout_width="300dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Senha"
-        android:inputType="text"
+        android:inputType="textPassword"
+        android:background="@drawable/round_border"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#fff"
+        android:paddingStart="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail"
-        tools:text="123" />
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+
+    <!-- Botão Entrar -->
+
+    <!-- Texto de link para criar conta -->
 
     <Button
         android:id="@+id/btnJoin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#C30C6B"
         android:text="Entrar"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
@@ -60,11 +99,17 @@
         android:id="@+id/txtSemLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:text="Não tem login?"
+        android:text="Não possui conta?\n Clique aqui para criar uma."
+        android:textColor="#fff"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnJoin" />
+        app:layout_constraintTop_toBottomOf="@+id/btnJoin"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">mobile</string>
+    <string name="primeiro_nome">Primeiro Nome</string>
+    <string name="ultimo_nome">Sobrenome</string>
+    <string name="cadastro">Cadastro</string>
+    <string name="temUmLogin">Já tem um login?</string>
+    <string name="cpf">CPF</string>
+    <string name="e_mail">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="confirme_a_senha">Confirme a senha</string>
+    <string name="criar_conta">Criar conta</string>
+    <string name="sem_agendamento">Sem Agendamento</string>
+
 </resources>
