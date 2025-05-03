@@ -2,38 +2,26 @@ package com.example.mobile
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log // Mantido para logs de depuração
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.RadioButton // Importação necessária para RadioButton
-import android.widget.RadioGroup
+import android.util.Log
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog // Para exibir alertas ao usuário
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Immutable // Mantido caso usado em conjunto com Compose
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
+import androidx.compose.runtime.Immutable
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
-// Removido: import java.sql.Time // Não é mais necessário
-// Removido: import java.sql.Date // Não é mais necessário
-import java.text.ParseException // Importação para tratar erros de parse
-import java.text.SimpleDateFormat // Importação para formatar/parsear datas/horas
-import java.util.Locale // Importação para definir o Locale para formatação
-import java.util.Date // Importação necessária para java.util.Date
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
-// Data class Servico - Representa um serviço com nome e preço
-@Immutable // Boa prática, indica que o objeto é imutável após a criação
+@Immutable
 data class Servico(
     val name: String,
     val price: Double
 )
 
-// Lista COMPLETA de serviços disponíveis - Mantida conforme o original
 val servicosList: List<Servico> = listOf(
     Servico(name = "Brasileiro", price = 130.00),
     Servico(name = "Combo", price = 180.00),
@@ -52,234 +40,160 @@ val servicosList: List<Servico> = listOf(
     Servico(name = "Labio Natural", price = 250.00)
 )
 
-// --- Configuração de Rede e Data Classes para AGENDAMENTO ---
-
 object NetworkConfigAgendamento {
-    // Garanta que este IP esteja correto para sua configuração de emulador/dispositivo
-    // 10.0.2.2 é tipicamente usado pelo Emulador Android para acessar o localhost da máquina hospedeira
-    private const val BASE_URL = "http://10.0.2.2:5000/" // URL base da sua API
+    private const val BASE_URL = "http://10.0.2.2:5000/"
 
-    // Criação preguiçosa (lazy) da instância do serviço Retrofit
     val apiService: ApiServiceAgendamentoCli by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL) // Define a URL base
-            .addConverterFactory(GsonConverterFactory.create()) // Adiciona o conversor Gson para JSON
-            .build() // Constrói a instância do Retrofit
-            .create(ApiServiceAgendamentoCli::class.java) // Cria a implementação da interface do serviço
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiServiceAgendamentoCli::class.java)
     }
 }
 
-// Interface que define os endpoints da API para Agendamento
 interface ApiServiceAgendamentoCli {
     @POST("agendamentos")
-    fun criarAgendamento(@Body request: AgendamentoRequest): Call<AgendamentoCliResponse> // Define o método da API
+    fun criarAgendamento(@Body request: AgendamentoRequest): Call<AgendamentoCliResponse>
 }
 
-// Data class para o corpo da requisição de AGENDAMENTO
-// *** Os nomes dos campos (DATA, HORA, etc.) devem corresponder EXATAMENTE ao que a API espera ***
 data class AgendamentoRequest(
-    val DATA: String, // DATA como String formatada
-    val HORA: String, // HORA como String formatada
+    val DATA: String,
+    val HORA: String,
     val PROCEDIMENTO: String,
     val VALOR: Double,
     val TP_PAGAMENTO: String,
     val ID_CLIENT: Int
 )
 
-// Data class para o corpo da resposta da API de AGENDAMENTO
-data class AgendamentoCliResponse(
-    val message: String // Assumindo que a API responde com uma mensagem simples
-)
-
-// --- Activity de Agendamento ---
+data class AgendamentoCliResponse(val message: String)
 
 class AgendamentoActivity : AppCompatActivity() {
 
-    // Declaração das Views (componentes de UI)
     private lateinit var editTextDate: EditText
     private lateinit var editTextTime: EditText
     private lateinit var radioGroupPagamento: RadioGroup
-    private lateinit var checkBoxBrasileiro: CheckBox
-    private lateinit var checkBoxCombo: CheckBox
-    private lateinit var checkBoxDesign: CheckBox
     private lateinit var btnAgendar: Button
+    private lateinit var textoValor: TextView
 
-    private var idCliente: Int? = null // Variável para armazenar o ID do cliente (agora Int?)
+    private var idCliente: Int? = null
 
-    // Formatadores para LER a entrada do usuário
     private val inputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val inputTimeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-
-    // Formatadores para FORMATAR a saída para a API (AJUSTE OS PADRÕES CONFORME NECESSÁRIO!)
     private val apiDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    private val apiTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault()) // Ex: "HH:mm" ou "HH:mm:ss"
-
+    private val apiTimeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Habilita layout de ponta a ponta (Edge-to-Edge)
-        setContentView(R.layout.activity_agendamento) // Define o layout XML para esta activity
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_agendamento)
 
-        // --- Recuperação Segura do ID do Cliente (Int) ---
-        // Log.e("AgendamentoActivity", idCliente.toString()) // Log inicial mostrará null, pode remover se não for útil
-        val idClienteStr: String? = intent.getStringExtra("ID") // Pega como String?
-        if (idClienteStr.isNullOrBlank()) {
-            Log.e("AgendamentoActivity", "ID do Cliente (String) não encontrado ou vazio nos extras do Intent.")
-            mostrarAlertaSimples("Erro: Identificação do cliente não fornecida.")
-            // Considerar finalizar a activity ou usar um valor padrão se aplicável
-            // finish()
-        } else {
-            // Tenta converter a String para Int de forma segura
-            idCliente = idClienteStr.toIntOrNull()
-            if (idCliente == null) {
-                Log.e("AgendamentoActivity", "Falha ao converter ID do Cliente ('$idClienteStr') para Int.")
-                mostrarAlertaSimples("Erro: Identificação do cliente inválida.")
-                // Considerar finalizar a activity
-                // finish()
-            } else {
-                Log.d("AgendamentoActivity", "ID do Cliente (Int) recebido: $idCliente")
-            }
-        }
-        // ----------------------------------------------------
-
-
-        // Inicializa as Views encontrando-as pelo ID no layout XML
-        editTextDate = findViewById(R.id.editData)
-        editTextTime = findViewById(R.id.editHoraAtualiza)
+        editTextDate = findViewById(R.id.dataAgendamento)
+        editTextTime = findViewById(R.id.horaAgendamento)
         radioGroupPagamento = findViewById(R.id.radioGroup)
-        checkBoxBrasileiro = findViewById(R.id.chkBrasileiro)
-        checkBoxCombo = findViewById(R.id.chkCombo)
-        checkBoxDesign = findViewById(R.id.chkDesign)
-        btnAgendar = findViewById(R.id.idBtnAgendarAtualizar)
+        btnAgendar = findViewById(R.id.btnAgendar)
+        textoValor = findViewById(R.id.textoValorDinamico)
 
-        // Configura o listener de clique para o botão "Agendar"
+        val idClienteStr: String? = intent.getStringExtra("ID")
+        idCliente = idClienteStr?.toIntOrNull()
+        if (idCliente == null) {
+            mostrarAlertaSimples("Erro: Identificação do cliente inválida.")
+            return
+        }
+
+        // Atualiza o valor total sempre que qualquer checkbox muda
+        servicosList.forEach { servico ->
+            val checkBoxId = resources.getIdentifier(
+                "cb" + servico.name.replace(" ", ""),
+                "id",
+                packageName
+            )
+            val checkBox = findViewById<CheckBox>(checkBoxId)
+            checkBox?.setOnCheckedChangeListener { _, _ -> atualizarValorTotal() }
+        }
+
+        atualizarValorTotal()
+
         btnAgendar.setOnClickListener {
-            // 1. Valida o ID do Cliente (agora checa se é null)
-            if (idCliente == null) { // Correção na validação do ID
-                mostrarAlertaSimples("Erro: Não foi possível identificar o cliente. Tente novamente.")
-                return@setOnClickListener // Para a execução do listener aqui
-            }
-
-            // 2. Coleta os dados do formulário (Strings)
             val dataStr = editTextDate.text.toString().trim()
             val horaStr = editTextTime.text.toString().trim()
             val nomesProcedimentosSelecionados = obterNomesProcedimentosSelecionadosDoXml()
             val precoTotal = calcularPrecoTotal(nomesProcedimentosSelecionados)
 
-            // 3. Obtém a forma de pagamento selecionada (String)
             val selectedPaymentId = radioGroupPagamento.checkedRadioButtonId
-            val formaPagamento: String
-
-            if (selectedPaymentId != -1) {
-                val selectedRadioButton = findViewById<RadioButton>(selectedPaymentId)
-                formaPagamento = selectedRadioButton.text.toString()
+            val formaPagamento = if (selectedPaymentId != -1) {
+                findViewById<RadioButton>(selectedPaymentId).text.toString()
             } else {
                 mostrarAlertaSimples("Por favor, selecione uma forma de pagamento.")
                 return@setOnClickListener
             }
 
-            // 4. Validação básica dos campos String e lista
-            if (dataStr.isEmpty()) {
-                mostrarAlertaSimples("Por favor, insira a data (dd/MM/yyyy).")
-                return@setOnClickListener
-            }
-            if (horaStr.isEmpty()) {
-                mostrarAlertaSimples("Por favor, insira a hora (HH:mm).")
-                return@setOnClickListener
-            }
-            if (nomesProcedimentosSelecionados.isEmpty()) {
-                mostrarAlertaSimples("Por favor, selecione pelo menos um procedimento.")
+            if (dataStr.isEmpty() || horaStr.isEmpty() || nomesProcedimentosSelecionados.isEmpty()) {
+                mostrarAlertaSimples("Preencha todos os campos corretamente.")
                 return@setOnClickListener
             }
 
-            // --- 5. Parse da Entrada e Formatação para API ---
             val dataFormatadaApi: String
             val horaFormatadaApi: String
-            val procedimentosStr: String = nomesProcedimentosSelecionados.joinToString(separator = ",") // Junta a lista numa String
+            val procedimentosStr = nomesProcedimentosSelecionados.joinToString(",")
 
             try {
-                // Parse da entrada do usuário para objeto java.util.Date
-                val utilDate: Date? = inputDateFormat.parse(dataStr)
-                val utilTime: Date? = inputTimeFormat.parse(horaStr) // Parse da hora também retorna Date
-
-                // Verifica se o parse foi bem sucedido
-                if (utilDate == null || utilTime == null) {
-                    throw ParseException("Erro ao parsear data ou hora (resultado nulo)", 0)
-                }
-
-                // Formata os objetos Date para as Strings no formato da API
+                val utilDate = inputDateFormat.parse(dataStr)
+                val utilTime = inputTimeFormat.parse(horaStr)
+                if (utilDate == null || utilTime == null) throw ParseException("Formato inválido", 0)
                 dataFormatadaApi = apiDateFormat.format(utilDate)
-                horaFormatadaApi = apiTimeFormat.format(utilTime) // Formata a parte da hora do objeto Date
-
-                Log.d("AgendamentoActivity", "Data formatada para API: $dataFormatadaApi")
-                Log.d("AgendamentoActivity", "Hora formatada para API: $horaFormatadaApi")
-
+                horaFormatadaApi = apiTimeFormat.format(utilTime)
             } catch (e: ParseException) {
-                Log.e("AgendamentoActivity", "Erro ao parsear/formatar data ou hora: ${e.message}")
-                mostrarAlertaSimples("Formato inválido. Use dd/MM/yyyy para data e HH:mm para hora.")
-                return@setOnClickListener // Para a execução se o formato estiver incorreto
+                mostrarAlertaSimples("Formato inválido. Use dd/MM/yyyy e HH:mm.")
+                return@setOnClickListener
             }
 
-            // Cria o objeto AgendamentoRequest com Strings formatadas
-            val agendamentoRequest = AgendamentoRequest(
-                DATA = dataFormatadaApi,       // Passa a String formatada (ex: "2025-04-12")
-                HORA = horaFormatadaApi,       // Passa a String formatada (ex: "18:14:00")
+            val request = AgendamentoRequest(
+                DATA = dataFormatadaApi,
+                HORA = horaFormatadaApi,
                 PROCEDIMENTO = procedimentosStr,
                 VALOR = precoTotal,
                 TP_PAGAMENTO = formaPagamento,
-                ID_CLIENT = idCliente!!        // Passa o Int (!! é seguro após a validação inicial)
+                ID_CLIENT = idCliente!!
             )
-            // -----------------------------------------------------------
 
-
-            // 6. Chama a função que faz a requisição para a API
-            criarAgendamentoApi(agendamentoRequest)
+            criarAgendamentoApi(request)
         }
     }
 
-    // --- Funções Auxiliares ---
+    private fun atualizarValorTotal() {
+        val selecionados = obterNomesProcedimentosSelecionadosDoXml()
+        val precoTotal = calcularPrecoTotal(selecionados)
+        textoValor.text = "Total: R$ %.2f".format(precoTotal)
+    }
 
-    // Retorna uma lista de nomes dos serviços selecionados com base nos CheckBoxes existentes no XML
     private fun obterNomesProcedimentosSelecionadosDoXml(): List<String> {
         val nomesSelecionados = mutableListOf<String>()
-        if (checkBoxBrasileiro.isChecked) {
-            nomesSelecionados.add(checkBoxBrasileiro.text.toString())
-        }
-        if (checkBoxCombo.isChecked) {
-            nomesSelecionados.add(checkBoxCombo.text.toString())
-        }
-        if (checkBoxDesign.isChecked) {
-            nomesSelecionados.add(checkBoxDesign.text.toString())
+        servicosList.forEach { servico ->
+            val checkBoxId = resources.getIdentifier("cb" + servico.name.replace(" ", ""), "id", packageName)
+            val checkBox = findViewById<CheckBox>(checkBoxId)
+            if (checkBox?.isChecked == true) {
+                nomesSelecionados.add(servico.name)
+            }
         }
         return nomesSelecionados
     }
 
-    // Calcula o preço total com base em uma lista de nomes de serviços selecionados
     private fun calcularPrecoTotal(nomesSelecionados: List<String>): Double {
-        var precoTotal = 0.0
-        nomesSelecionados.forEach { nomeSelecionado ->
-            val servicoEncontrado = servicosList.find { it.name.equals(nomeSelecionado, ignoreCase = true) }
-            precoTotal += servicoEncontrado?.price ?: 0.0
+        return nomesSelecionados.sumOf { nome ->
+            servicosList.find { it.name.equals(nome, ignoreCase = true) }?.price ?: 0.0
         }
-        Log.d("AgendamentoActivity", "Preço Total Calculado: $precoTotal")
-        return precoTotal
     }
 
-    // --- Funções de Alerta (AlertDialog) ---
-
-    // Exibe um diálogo de alerta simples com uma mensagem
     private fun mostrarAlertaSimples(mensagem: String) {
         AlertDialog.Builder(this)
             .setTitle("Aviso")
             .setMessage(mensagem)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
     }
 
-    // Exibe uma mensagem de sucesso e navega para a MainActivity
     private fun mostrarAlertaSucessoAgendamento(mensagem: String) {
         AlertDialog.Builder(this)
             .setTitle("Sucesso")
@@ -289,20 +203,13 @@ class AgendamentoActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
-                // finish() // Descomente se quiser fechar esta activity após o sucesso
             }
             .setCancelable(false)
             .create()
             .show()
     }
 
-
-    // --- Função de Chamada da API ---
-
-    // Realiza a chamada à API para criar um novo agendamento
     private fun criarAgendamentoApi(request: AgendamentoRequest) {
-        Log.d("API_REQUEST", "Enviando para /agendamentos: $request") // Log da requisição enviada
-
         NetworkConfigAgendamento.apiService.criarAgendamento(request)
             .enqueue(object : Callback<AgendamentoCliResponse> {
                 override fun onResponse(
@@ -310,28 +217,23 @@ class AgendamentoActivity : AppCompatActivity() {
                     response: Response<AgendamentoCliResponse>
                 ) {
                     if (response.isSuccessful && response.body() != null) {
-                        val responseBody = response.body()!!
-                        Log.i("API_RESPONSE_SUCCESS", "Agendamento criado: ${responseBody.message}")
-                        mostrarAlertaSucessoAgendamento("Agendamento realizado com sucesso!\n${responseBody.message}")
+                        mostrarAlertaSucessoAgendamento(response.body()!!.message)
+                        var intensao = Intent(this@AgendamentoActivity, AgendamentosActivity::class.java)
+
+                        startActivity(intensao)
+                        finish()
                     } else {
-                        var errorDetails = "Nenhum detalhe no corpo do erro."
-                        try {
-                            val errorBody = response.errorBody()?.string()
-                            if (!errorBody.isNullOrBlank()) {
-                                errorDetails = errorBody
-                            }
+                        val errorDetails = try {
+                            response.errorBody()?.string() ?: "Erro desconhecido."
                         } catch (e: Exception) {
-                            Log.e("API_RESPONSE_ERROR", "Erro ao ler errorBody: ${e.message}")
+                            "Erro ao ler erroBody: ${e.message}"
                         }
-                        val errorMsg = "Erro ${response.code()}: ${response.message()}\nDetalhes: $errorDetails"
-                        Log.e("API_RESPONSE_ERROR", errorMsg)
-                        mostrarAlertaSimples("Falha ao agendar (Erro ${response.code()}). Detalhes: $errorDetails")
+                        mostrarAlertaSimples("Erro ${response.code()}: $errorDetails")
                     }
                 }
 
                 override fun onFailure(call: Call<AgendamentoCliResponse>, t: Throwable) {
-                    Log.e("API_CALL_FAILURE", "Falha na chamada da API: ${t.message}", t)
-                    mostrarAlertaSimples("Falha na comunicação com o servidor: ${t.localizedMessage ?: "Erro desconhecido"}")
+                    mostrarAlertaSimples("Erro na comunicação: ${t.localizedMessage ?: "Erro desconhecido"}")
                 }
             })
     }

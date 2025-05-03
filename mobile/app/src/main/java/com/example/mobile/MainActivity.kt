@@ -1,6 +1,7 @@
 package com.example.mobile
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -113,6 +114,8 @@ class MainActivity : AppCompatActivity() {
         if (loginResponses.isNotEmpty()) {
             val usuarioLogado: LoginResponse = loginResponses.first()
 
+            val prefs = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+            prefs.edit().putString("CPF", usuarioLogado.CPF).apply()
 
             var intensao = Intent(this, AgendamentosActivity::class.java)
             Log.d("Login", usuarioLogado.ID.toString())

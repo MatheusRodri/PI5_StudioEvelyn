@@ -1,234 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AgendamentoActivity">
+    android:fillViewport="true">
 
-
-    <CheckBox
-        android:id="@+id/checkBox11"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="659dp" />
+        android:background="@drawable/linear_background"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        tools:context=".AgendamentoActivity">
 
-    <CheckBox
-        android:id="@+id/checkBox12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="279dp"
-        tools:layout_editor_absoluteY="659dp" />
+        <TextView
+            android:id="@+id/textoAgendamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/agendamento"
+            android:textColor="#C30C6B"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Agendamento"
-        android:textSize="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/editData"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/dataAgendamento"
+            style="@style/EditTextDefault"
+            android:layout_width="200dp"
+            android:layout_marginTop="80dp"
+            android:autofillHints="name"
+            android:hint="@string/data"
+            android:inputType="date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textoAgendamento" />
 
-    <EditText
-        android:id="@+id/editData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:ems="10"
-        android:hint="Data"
-        android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/editHoraAtualiza"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/horaAgendamento"
+            style="@style/EditTextDefault"
+            android:layout_width="200dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints="name"
+            android:hint="@string/hor_rio"
+            android:inputType="time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dataAgendamento" />
+
+        <TextView
+            android:id="@+id/textoProcedimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/procedimento"
+            android:textColor="#C30C6B"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horaAgendamento" />
 
 
-    <EditText
-        android:id="@+id/editHoraAtualiza"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:ems="10"
-        android:hint="Horário"
-        android:inputType="time"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editData" />
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowCheckboxes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="cbBrasileiro,cbCombo,cbDesign,cbFox,cbHenna,cbHibrido,cbLabio,cbMega,cbNatural"
+            app:flow_horizontalAlign="end"
+            app:flow_horizontalGap="16dp"
+            app:flow_lastHorizontalBias="0.5"
+            app:flow_verticalGap="16dp"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textoProcedimento" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/idBtnAgendarAtualizar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <CheckBox android:id="@+id/cbBrasileiro" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brasileiro" />
+        <CheckBox android:id="@+id/cbCombo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Combo" />
+        <CheckBox android:id="@+id/cbDesign" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Design" />
+        <CheckBox android:id="@+id/cbFox" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fox" />
+        <CheckBox android:id="@+id/cbHenna" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Henna" />
+        <CheckBox android:id="@+id/cbHibrido" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hibrido" />
+        <CheckBox android:id="@+id/cbLabio" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Labio" />
+        <CheckBox android:id="@+id/cbMega" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mega" />
+        <CheckBox android:id="@+id/cbNatural" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Natural" />
+<!--        <CheckBox android:id="@+id/cbShadow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shadow\nR$280,00" />-->
+<!--        <CheckBox android:id="@+id/cbRusso" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Russo\nR$150,00" />-->
+<!--        <CheckBox android:id="@+id/cbCompleto" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completo\nR$200,00" />-->
+<!--        <CheckBox android:id="@+id/cbKardashian" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kardashian\nR$150,00" />-->
+<!--        <CheckBox android:id="@+id/cbLabioNatural" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Labio Natural\nR$250,00" />-->
+<!--        <CheckBox android:id="@+id/cbMicropigmentacao" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Micropigmentacao\nR$250,00" />-->
 
+        <TextView
+            android:id="@+id/textoFormaDePagamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/forma_de_pagamento"
+            android:textColor="#C30C6B"
+            android:textSize="25sp"
+            app:layout_constraintTop_toBottomOf="@id/flowCheckboxes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+<RadioGroup
+    android:id="@+id/radioGroup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintTop_toBottomOf="@+id/textoFormaDePagamento"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
         <RadioButton
             android:id="@+id/chkCartao"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Cartão de crédito"
-            app:layout_constraintBottom_toTopOf="@+id/chkPix"
-            tools:layout_editor_absoluteX="32dp" />
+            app:layout_constraintTop_toBottomOf="@id/textoFormaDePagamento"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"/>
 
         <RadioButton
             android:id="@+id/chkPix"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pix"
-            app:layout_constraintBottom_toTopOf="@+id/idBtnAgendarAtualizar"
-            tools:layout_editor_absoluteX="32dp" />
+            app:layout_constraintTop_toBottomOf="@id/textoFormaDePagamento"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+</RadioGroup>
 
-        <RadioButton
-            android:id="@+id/chkDinheiro"
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/textoValorDinamico"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dinheiro"
-            app:layout_constraintBottom_toTopOf="@+id/idBtnAgendarAtualizar"
-            tools:layout_editor_absoluteX="216dp" />
-    </RadioGroup>
+            android:text="Total: R$0,00"
+            android:textSize="20sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/radioGroup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/idBtnAgendarAtualizar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Agendar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/btnAgendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/agendar"
+            android:backgroundTint="#C30C6B"
+            app:layout_constraintTop_toBottomOf="@id/textoValorDinamico"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="409dp"
-        android:layout_height="5dp"
-        android:layout_marginBottom="52dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="409dp"
-        android:layout_height="5dp"
-        android:layout_marginBottom="600dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="Forma de Pagamento:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="Procedimento:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="274dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="275dp"
-        tools:layout_editor_absoluteY="274dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="346dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="279dp"
-        tools:layout_editor_absoluteY="344dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="428dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="509dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="284dp"
-        tools:layout_editor_absoluteY="509dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="582dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="284dp"
-        tools:layout_editor_absoluteY="582dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="284dp"
-        tools:layout_editor_absoluteY="428dp" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

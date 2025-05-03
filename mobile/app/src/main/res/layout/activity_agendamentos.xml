@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/linear_background"
     tools:context=".AgendamentosActivity">
 
     <ProgressBar
@@ -24,13 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         android:layout_marginBottom="1dp"
-        android:text="Agendar"
+        android:text="@string/agendar"
+        android:backgroundTint="#C30C6B"
         app:layout_constraintBottom_toTopOf="@+id/idAgendamentos"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.084" />
+
+        />
 
 
 
@@ -50,6 +52,7 @@
         android:layout_height="wrap_content"
         android:text="@string/sem_agendamento"
         android:textSize="30sp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/idAgendamentos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

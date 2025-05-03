@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <!-- Permissão para acessar a internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -16,23 +16,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".atualiza_agendamento"
+            android:name=".Atualiza_Agendamento_Activity"
             android:exported="false" />
+        <!-- Tela de Atualização -->
         <activity
             android:name=".AtualizaAgendamentoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Atualiza_Agendamento"
-            android:exported="false" />
+            android:exported="false" /> <!-- Tela de Agendamento (AGORA É A TELA INICIAL) -->
         <activity
             android:name=".AgendamentoActivity"
-            android:exported="false" />
+            android:exported="true" /> <!-- Outras telas -->
         <activity
             android:name=".AgendamentosActivity"
             android:exported="false" />
         <activity
             android:name=".CadastroActivity"
-            android:exported="false" />
+            android:exported="false" /> <!-- MainActivity ainda está no app, mas não inicia automaticamente -->
         <activity
             android:name=".MainActivity"
             android:exported="true">

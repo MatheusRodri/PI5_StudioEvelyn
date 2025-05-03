@@ -13,72 +13,9 @@ import retrofit2.http.POST
 import java.text.SimpleDateFormat
 import java.util.*
 
-// Função para formatar de ISO para BR (exibição)
-fun String.formatarDataISOParaBR(): String {
-    return try {
-        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val date = parser.parse(this)
-        formatter.format(date!!)
-    } catch (e: Exception) {
-        this
-    }
-}
-
-fun String.formatarDataBRparaMySQL(): String {
-    return try {
-        val parser = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = parser.parse(this)
-        formatter.format(date!!)
-    } catch (e: Exception) {
-        this
-    }
-}
 
 
-@Immutable
-data class ServicoAtualizar(
-    val name: String,
-    val price: Double
-)
 
-val servicosListAtualizar: List<ServicoAtualizar> = listOf(
-    ServicoAtualizar(name = "Brasileiro", price = 130.00),
-    ServicoAtualizar(name = "Combo", price = 180.00),
-    ServicoAtualizar(name = "Design", price = 35.00),
-)
-
-object NetworkConfigAtualizaAgendamento {
-    private const val BASE_URL = "http://10.0.2.2:5000/"
-
-    val apiService: ApiServiceAtualizaAgendamento by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiServiceAtualizaAgendamento::class.java)
-    }
-
-    interface ApiServiceAtualizaAgendamento {
-        @POST("agendamentos/atualiza")
-        fun atualizarAgendamento(@Body request: AgendamentoAtualizarRequest): Call<AgendamentoAtualizarResponse>
-    }
-
-    data class AgendamentoAtualizarRequest(
-        val ID: Int,
-        val DATA: String,
-        val HORA: String,
-        val PROCEDIMENTO: String,
-        val VALOR: Double,
-        val TP_PAGAMENTO: String,
-        val ID_CLIENT: Int
-    )
-
-    data class AgendamentoAtualizarResponse(
-        val message: String
-    )
-}
 
 class AtualizaAgendamentoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

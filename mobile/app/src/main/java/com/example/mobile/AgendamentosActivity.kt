@@ -75,15 +75,18 @@ class AgendamentosActivity : AppCompatActivity() {
 
         clienteCpf = intent.getStringExtra("CPF")
         clienteId = intent.getStringExtra("ID_Cliente")
+        val prefs = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
+        val cpf = prefs.getString("CPF", null)
+
 
         Log.d("AgendamentosActivity", "CPF Recebido: $clienteCpf")
 
-        if (clienteCpf.isNullOrEmpty()) {
-            Toast.makeText(this, "Erro: CPF do cliente não encontrado ou inválido na Intent.", Toast.LENGTH_LONG).show()
-            Log.e("AgendamentosActivity", "CPF recebido é nulo ou vazio.")
-            finish()
-            return
-        }
+//        if (clienteCpf.isNullOrEmpty()) {
+//            Toast.makeText(this, "Erro: CPF do cliente não encontrado ou inválido na Intent.", Toast.LENGTH_LONG).show()
+//            Log.e("AgendamentosActivity", "CPF recebido é nulo ou vazio.")
+//            finish()
+//            return
+//        }
 
         initRecyclerView()
         setupAgendarButton()

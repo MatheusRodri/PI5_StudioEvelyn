@@ -88,11 +88,12 @@ class AdapterAgendamento(
         }
 
         holder.btnAlterar.setOnClickListener {
-            var intensao = Intent(it.context, AtualizaAgendamentoActivity::class.java)
+            var intensao = Intent(it.context, Atualiza_Agendamento_Activity::class.java)
             intensao.putExtra("ID_AGENDAMENTO",agendamento.ID_AGENDAMENTO)
             intensao.putExtra("NOME_PROCEDIMENTO",agendamento.PROCEDIMENTO)
             intensao.putExtra("HORA_AGENDAMENTO",agendamento.HORA)
             intensao.putExtra("DATA_AGENDAMENTO",agendamento.DATA)
+            intensao.putExtra("VALOR_TOTAL",agendamento.VALOR)
             intensao.putExtra("FORMA_PAGAMENTO_AGENDAMENTO",agendamento.TP_PAGAMENTO)
             intensao.putExtra("ID_CLIENTE",agendamento.ID_CLIENTE)
 
