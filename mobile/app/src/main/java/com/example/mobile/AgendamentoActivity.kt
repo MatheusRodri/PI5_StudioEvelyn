@@ -2,16 +2,17 @@ package com.example.mobile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Immutable
+import com.example.mobile.data.model.agendamento.AgendamentoRequest
+import com.example.mobile.data.model.agendamento.AgendamentoResponse
+import com.example.mobile.data.remote.provider.AgendamentoProvider
 import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,34 +41,6 @@ val servicosList: List<Servico> = listOf(
     Servico(name = "Labio Natural", price = 250.00)
 )
 
-object NetworkConfigAgendamento {
-    private const val BASE_URL = "http://10.0.2.2:5000/"
-
-    val apiService: ApiServiceAgendamentoCli by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiServiceAgendamentoCli::class.java)
-    }
-}
-
-interface ApiServiceAgendamentoCli {
-    @POST("agendamentos")
-    fun criarAgendamento(@Body request: AgendamentoRequest): Call<AgendamentoCliResponse>
-}
-
-data class AgendamentoRequest(
-    val DATA: String,
-    val HORA: String,
-    val PROCEDIMENTO: String,
-    val VALOR: Double,
-    val TP_PAGAMENTO: String,
-    val ID_CLIENT: Int
-)
-
-data class AgendamentoCliResponse(val message: String)
-
 class AgendamentoActivity : AppCompatActivity() {
 
     private lateinit var editTextDate: EditText
@@ -75,6 +48,7 @@ class AgendamentoActivity : AppCompatActivity() {
     private lateinit var radioGroupPagamento: RadioGroup
     private lateinit var btnAgendar: Button
     private lateinit var textoValor: TextView
+
 
     private var idCliente: Int? = null
 
@@ -94,14 +68,17 @@ class AgendamentoActivity : AppCompatActivity() {
         btnAgendar = findViewById(R.id.btnAgendar)
         textoValor = findViewById(R.id.textoValorDinamico)
 
+        aplicarMascaraData(editTextDate)
+        aplicarMascaraHora(editTextTime)
+
         val idClienteStr: String? = intent.getStringExtra("ID")
         idCliente = idClienteStr?.toIntOrNull()
         if (idCliente == null) {
-            mostrarAlertaSimples("Erro: Identificação do cliente inválida.")
+            Log.e("Agendamento","Erro: Identificação do cliente inválida.")
             return
         }
 
-        // Atualiza o valor total sempre que qualquer checkbox muda
+
         servicosList.forEach { servico ->
             val checkBoxId = resources.getIdentifier(
                 "cb" + servico.name.replace(" ", ""),
@@ -115,49 +92,73 @@ class AgendamentoActivity : AppCompatActivity() {
         atualizarValorTotal()
 
         btnAgendar.setOnClickListener {
-            val dataStr = editTextDate.text.toString().trim()
-            val horaStr = editTextTime.text.toString().trim()
-            val nomesProcedimentosSelecionados = obterNomesProcedimentosSelecionadosDoXml()
-            val precoTotal = calcularPrecoTotal(nomesProcedimentosSelecionados)
+            btnAgendar.setOnClickListener {
+                val dataStr = editTextDate.text.toString().trim()
+                val horaStr = editTextTime.text.toString().trim()
+                val nomesProcedimentosSelecionados = obterNomesProcedimentosSelecionadosDoXml()
+                val precoTotal = calcularPrecoTotal(nomesProcedimentosSelecionados)
 
-            val selectedPaymentId = radioGroupPagamento.checkedRadioButtonId
-            val formaPagamento = if (selectedPaymentId != -1) {
-                findViewById<RadioButton>(selectedPaymentId).text.toString()
-            } else {
-                mostrarAlertaSimples("Por favor, selecione uma forma de pagamento.")
-                return@setOnClickListener
+                val selectedPaymentId = radioGroupPagamento.checkedRadioButtonId
+                val formaPagamento = if (selectedPaymentId != -1) {
+                    findViewById<RadioButton>(selectedPaymentId).text.toString()
+                } else {
+                    Toast.makeText(this,"Por favor, selecione uma forma de pagamento.",Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
+                if (dataStr.isEmpty() || horaStr.isEmpty() || nomesProcedimentosSelecionados.isEmpty()) {
+                    Toast.makeText(this,"Preencha todos os campos corretamente.",Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
+                val dataFormatadaApi: String
+                val horaFormatadaApi: String
+                val procedimentosStr = nomesProcedimentosSelecionados.joinToString(",")
+
+                try {
+                    val utilDate = inputDateFormat.parse(dataStr)
+                    val utilTime = inputTimeFormat.parse(horaStr)
+
+                    if (utilDate == null || utilTime == null) throw ParseException("Formato inválido", 0)
+
+                    // ✅ Validação 1: Data não pode ser anterior ao dia atual
+                    val hoje = Calendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0) }.time
+                    if (utilDate.before(hoje)) {
+
+                        Toast.makeText(this,"A data deve ser hoje ou posterior.",Toast.LENGTH_LONG).show()
+                        return@setOnClickListener
+
+                    }
+
+                    // ✅ Validação 2: Hora entre 09:00 e 20:00
+                    val hora = Calendar.getInstance().apply { time = utilTime }.get(Calendar.HOUR_OF_DAY)
+                    val minuto = Calendar.getInstance().apply { time = utilTime }.get(Calendar.MINUTE)
+
+                    if (hora < 9 || hora > 20 || (hora == 20 && minuto > 0)) {
+                        Toast.makeText(this,"O horário deve estar entre 09:00 e 20:00.",Toast.LENGTH_LONG).show()
+                        return@setOnClickListener
+                    }
+
+                    dataFormatadaApi = apiDateFormat.format(utilDate)
+                    horaFormatadaApi = apiTimeFormat.format(utilTime)
+
+                } catch (e: ParseException) {
+                    Log.e("Agendamento","Formato inválido. Use dd/MM/yyyy e HH:mm.")
+                    return@setOnClickListener
+                }
+
+                val request = AgendamentoRequest(
+                    DATA = dataFormatadaApi,
+                    HORA = horaFormatadaApi,
+                    PROCEDIMENTO = procedimentosStr,
+                    VALOR = precoTotal,
+                    TP_PAGAMENTO = formaPagamento,
+                    ID_CLIENT = idCliente!!
+                )
+
+                criarAgendamentoApi(request)
             }
 
-            if (dataStr.isEmpty() || horaStr.isEmpty() || nomesProcedimentosSelecionados.isEmpty()) {
-                mostrarAlertaSimples("Preencha todos os campos corretamente.")
-                return@setOnClickListener
-            }
-
-            val dataFormatadaApi: String
-            val horaFormatadaApi: String
-            val procedimentosStr = nomesProcedimentosSelecionados.joinToString(",")
-
-            try {
-                val utilDate = inputDateFormat.parse(dataStr)
-                val utilTime = inputTimeFormat.parse(horaStr)
-                if (utilDate == null || utilTime == null) throw ParseException("Formato inválido", 0)
-                dataFormatadaApi = apiDateFormat.format(utilDate)
-                horaFormatadaApi = apiTimeFormat.format(utilTime)
-            } catch (e: ParseException) {
-                mostrarAlertaSimples("Formato inválido. Use dd/MM/yyyy e HH:mm.")
-                return@setOnClickListener
-            }
-
-            val request = AgendamentoRequest(
-                DATA = dataFormatadaApi,
-                HORA = horaFormatadaApi,
-                PROCEDIMENTO = procedimentosStr,
-                VALOR = precoTotal,
-                TP_PAGAMENTO = formaPagamento,
-                ID_CLIENT = idCliente!!
-            )
-
-            criarAgendamentoApi(request)
         }
     }
 
@@ -185,39 +186,20 @@ class AgendamentoActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarAlertaSimples(mensagem: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Aviso")
-            .setMessage(mensagem)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .create()
-            .show()
-    }
-
-    private fun mostrarAlertaSucessoAgendamento(mensagem: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Sucesso")
-            .setMessage(mensagem)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-            .setCancelable(false)
-            .create()
-            .show()
-    }
-
     private fun criarAgendamentoApi(request: AgendamentoRequest) {
-        NetworkConfigAgendamento.apiService.criarAgendamento(request)
-            .enqueue(object : Callback<AgendamentoCliResponse> {
+
+        val call = AgendamentoProvider.agendamentoApi.criarAgendamento(request)
+
+
+        call.enqueue(object : Callback<AgendamentoResponse> {
                 override fun onResponse(
-                    call: Call<AgendamentoCliResponse>,
-                    response: Response<AgendamentoCliResponse>
+
+                    call: Call<AgendamentoResponse>,
+                    response: Response<AgendamentoResponse>
+
                 ) {
                     if (response.isSuccessful && response.body() != null) {
-                        mostrarAlertaSucessoAgendamento(response.body()!!.message)
+                        Toast.makeText(this@AgendamentoActivity,"Agendamento realizado com sucesso!",Toast.LENGTH_LONG).show()
                         var intensao = Intent(this@AgendamentoActivity, AgendamentosActivity::class.java)
 
                         startActivity(intensao)
@@ -228,13 +210,73 @@ class AgendamentoActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                             "Erro ao ler erroBody: ${e.message}"
                         }
-                        mostrarAlertaSimples("Erro ${response.code()}: $errorDetails")
+                        Log.e("Agendamento","Erro ${response.code()}: $errorDetails")
                     }
                 }
 
-                override fun onFailure(call: Call<AgendamentoCliResponse>, t: Throwable) {
-                    mostrarAlertaSimples("Erro na comunicação: ${t.localizedMessage ?: "Erro desconhecido"}")
+                override fun onFailure(call: Call<AgendamentoResponse>, t: Throwable) {
+                    Log.e("Agendamento","Erro na comunicação: ${t.localizedMessage ?: "Erro desconhecido"}")
                 }
             })
     }
+
+    fun aplicarMascaraData(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating || s == null) return
+
+                val texto = s.toString().filter { it.isDigit() }
+                val builder = StringBuilder()
+
+                var i = 0
+                while (i < texto.length && i < 8) {
+                    builder.append(texto[i])
+                    if (i == 1 || i == 3) builder.append('/')
+                    i++
+                }
+
+                isUpdating = true
+                editText.setText(builder.toString())
+                editText.setSelection(builder.length.coerceAtMost(editText.text.length))
+                isUpdating = false
+            }
+        })
+    }
+
+    fun aplicarMascaraHora(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating || s == null) return
+
+                val texto = s.toString().filter { it.isDigit() }
+                val builder = StringBuilder()
+
+                var i = 0
+                while (i < texto.length && i < 4) {
+                    builder.append(texto[i])
+                    if (i == 1) builder.append(':')
+                    i++
+                }
+
+                isUpdating = true
+                editText.setText(builder.toString())
+                editText.setSelection(builder.length.coerceAtMost(editText.text.length))
+                isUpdating = false
+            }
+        })
+    }
+
+
 }

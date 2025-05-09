@@ -57,4 +57,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnWhatsApp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:src="@drawable/ic_whats_svg"
+        android:contentDescription="@string/whatsapp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:clickable="true"
+        android:focusable="true"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

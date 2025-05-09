@@ -18,5 +18,10 @@
     <string name="hor_rio">Horário</string>
     <string name="procedimento">Procedimento</string>
     <string name="forma_de_pagamento">Forma de Pagamento</string>
+    <string name="whatsapp">WhatsApp</string>
+    <string name="entrar">Entrar</string>
+    <string name="n_o_possui_conta_n_clique_aqui_para_criar_uma">Não possui conta?\n Clique aqui para criar uma.</string>
+    <string name="login">LOGIN</string>
+    <string name="studio_nevelyn">Studio\nEvelyn</string>
 
 </resources>

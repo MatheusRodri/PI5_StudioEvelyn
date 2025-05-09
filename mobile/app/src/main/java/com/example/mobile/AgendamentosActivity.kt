@@ -1,104 +1,67 @@
 package com.example.mobile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast // Import Toast
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible // Import for easy visibility toggle
-import androidx.lifecycle.lifecycleScope // Import for coroutines
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mobile.data.local.PreferenceHelper
+import com.example.mobile.data.model.agendamentos.AgendamentosRequest
+import com.example.mobile.data.remote.provider.AgendamentosProvider
 import com.example.mobile.databinding.ActivityAgendamentosBinding
-import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.launch // Import launch
-import retrofit2.HttpException // Import for HTTP errors
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.IOException
 
-data class AgendamentoResponse(
-    val ID: Int,
-    val NOME: String?,
-    val EMAIL: String?,
-    val CPF: String?,
-    val DATA: String?, // <<< MUDADO para String?
-    val HORA: String?, // <<< MUDADO para String?
-    val VALOR: Float,
-    val PROCEDIMENTO: String?,
-    val TP_PAGAMENTO: String?,
-    val ID_AGENDAMENTO: Int,
-    val ID_CLIENTE: Int
-)
-
-// Request: CORRIGIDO para ENVIAR "CPF" (maiúsculo) no JSON
-data class AgendamentoRequestBody(
-    // Diz ao Gson para usar a chave "CPF" no JSON ao serializar esta classe
-    @SerializedName("CPF")
-    val cpf: String // O nome da variável Kotlin pode continuar minúsculo (convenção)
-)
-
-// --- API Interface (sem alterações) ---
-interface ApiServiceAgendamento {
-    @POST("/agendamentos/cliente")
-    suspend fun getAgendamentos(@Body requestBody: AgendamentoRequestBody): List<AgendamentoResponse>
-}
-
-// --- Retrofit Instance (sem alterações) ---
-object RetrofitInstance {
-    private const val BASE_URL = "http://10.0.2.2:5000/"
-    val api: ApiServiceAgendamento by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiServiceAgendamento::class.java)
-    }
-}
-
-// --- Activity (sem alterações em relação à última versão com CPF) ---
 class AgendamentosActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAgendamentosBinding
-    private lateinit var adapterAgendamento: AdapterAgendamento // Seu adapter externo
-    private var clienteCpf: String? = null
-    private var clienteId: String? = null
+    private lateinit var adapterAgendamento: AdapterAgendamento
+    private lateinit var clienteId: String
+    private lateinit var clienteCpf: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityAgendamentosBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        clienteCpf = intent.getStringExtra("CPF")
-        clienteId = intent.getStringExtra("ID_Cliente")
-        val prefs = getSharedPreferences("APP_PREFS", MODE_PRIVATE)
-        val cpf = prefs.getString("CPF", null)
 
+        clienteCpf = PreferenceHelper.cpf.toString()
+        clienteId = PreferenceHelper.idCliente.toString()
 
-        Log.d("AgendamentosActivity", "CPF Recebido: $clienteCpf")
-
-//        if (clienteCpf.isNullOrEmpty()) {
-//            Toast.makeText(this, "Erro: CPF do cliente não encontrado ou inválido na Intent.", Toast.LENGTH_LONG).show()
-//            Log.e("AgendamentosActivity", "CPF recebido é nulo ou vazio.")
-//            finish()
-//            return
-//        }
+        setupWhatsAppButton()
+        Log.d("AgendamentosActivity", "CPF Recebido: $clienteCpf\nID cliente: $clienteId")
 
         initRecyclerView()
         setupAgendarButton()
         fetchAgendamentosFromApi()
     }
 
+    private fun setupWhatsAppButton() {
+        binding.btnWhatsApp.setOnClickListener {
+            val numero = "5511947792884"
+            val url = "https://wa.me/$numero"
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Não foi possível abrir o WhatsApp", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setupAgendarButton() {
         binding.btnAgendar.setOnClickListener {
-            val intensao = Intent(this, AgendamentoActivity::class.java)
-            Log.e("AgendamentosActivityEnvia", clienteId.toString())
-            intensao.putExtra("ID", clienteId)
-            startActivity(intensao)
+            val intent = Intent(this, AgendamentoActivity::class.java)
+            intent.putExtra("ID", clienteId)
+            startActivity(intent)
         }
     }
 
@@ -113,54 +76,41 @@ class AgendamentosActivity : AppCompatActivity() {
         binding.progressBar.isVisible = true
         binding.idAgendamentos.isVisible = false
 
-        // Cria o RequestBody usando a variável 'cpf' (minúscula)
-        // A anotação @SerializedName("CPF") cuidará para que o JSON gerado tenha a chave maiúscula
-        val requestBody = AgendamentoRequestBody(cpf = clienteCpf!!)
+        val request = AgendamentosRequest(clienteCpf)
 
         lifecycleScope.launch {
             try {
-                val response = RetrofitInstance.api.getAgendamentos(requestBody)
+                val response = AgendamentosProvider.agendamentosApi.getagendamentos(request)
                 adapterAgendamento.updateData(response)
                 binding.progressBar.isVisible = false
                 binding.idAgendamentos.isVisible = true
-
                 binding.txtSemAgendamentos.isVisible = response.isEmpty()
-
 
             } catch (e: IOException) {
                 Log.e("AgendamentosActivity", "Network Error: ${e.message}", e)
-                binding.progressBar.isVisible = false
-                binding.idAgendamentos.isVisible = true
-                Toast.makeText(this@AgendamentosActivity, "Erro de rede: Verifique sua conexão", Toast.LENGTH_LONG).show()
-                adapterAgendamento.updateData(emptyList())
-                binding.txtSemAgendamentos.isVisible = true
-
-
+                showErrorState("Erro de rede: Verifique sua conexão")
             } catch (e: HttpException) {
-                Log.e("AgendamentosActivity", "HTTP Error: ${e.code()} - ${e.message()}", e)
-                // Log do corpo do erro, se disponível (útil para debug)
                 val errorBody = e.response()?.errorBody()?.string()
+                Log.e("AgendamentosActivity", "HTTP Error: ${e.code()} - ${e.message()}")
                 Log.e("AgendamentosActivity", "Error Body: $errorBody")
-                binding.progressBar.isVisible = false
-                binding.idAgendamentos.isVisible = true
-                Toast.makeText(this@AgendamentosActivity, "Erro ao buscar dados: ${e.code()}", Toast.LENGTH_LONG).show()
-                adapterAgendamento.updateData(emptyList())
-                binding.txtSemAgendamentos.isVisible = true
-
-
-            } catch (e: Exception) { // Inclui possíveis erros de conversão do Gson (ex: Date/Time)
+                showErrorState("Erro ao buscar dados: ${e.code()}")
+            } catch (e: Exception) {
                 Log.e("AgendamentosActivity", "Unexpected Error: ${e.message}", e)
-                binding.progressBar.isVisible = false
-                binding.idAgendamentos.isVisible = true
-                Toast.makeText(this@AgendamentosActivity, "Ocorreu um erro inesperado", Toast.LENGTH_LONG).show()
-                adapterAgendamento.updateData(emptyList())
-                binding.txtSemAgendamentos.isVisible = true
-
+                showErrorState("Ocorreu um erro inesperado")
             }
         }
     }
+
+    private fun showErrorState(message: String) {
+        binding.progressBar.isVisible = false
+        binding.idAgendamentos.isVisible = true
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        adapterAgendamento.updateData(emptyList())
+        binding.txtSemAgendamentos.isVisible = true
+    }
+
     override fun onResume() {
         super.onResume()
-        fetchAgendamentosFromApi() // <- sua função que recarrega os dados
+        fetchAgendamentosFromApi()
     }
 }

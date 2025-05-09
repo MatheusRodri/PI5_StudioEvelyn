@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile.data.model.agendamentos.AgendamentosResponse
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call // Import necessário para Call
 import retrofit2.Callback // Import necessário para Callback
@@ -57,7 +58,7 @@ object RetrofitInstanceExcluir {
 
 
 class AdapterAgendamento(
-    private var agendamentos: List<AgendamentoResponse>
+    private var agendamentos: List<AgendamentosResponse>
 ) : RecyclerView.Adapter<AdapterAgendamento.AgendamentoViewHolder>() {
 
     class AgendamentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -160,7 +161,7 @@ class AdapterAgendamento(
     }
 
 
-    fun updateData(novaLista: List<AgendamentoResponse>) {
+    fun updateData(novaLista: List<AgendamentosResponse>) {
         agendamentos = novaLista
         notifyDataSetChanged()
     }
