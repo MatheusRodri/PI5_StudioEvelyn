@@ -9,8 +9,8 @@ import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Immutable
-import com.example.mobile.data.model.agendamento.AgendamentoRequest
-import com.example.mobile.data.model.agendamento.AgendamentoResponse
+import com.example.mobile.data.model.agendamento.cria.AgendamentoRequest
+import com.example.mobile.data.model.agendamento.cria.AgendamentoResponse
 import com.example.mobile.data.remote.provider.AgendamentoProvider
 import retrofit2.*
 import java.text.ParseException
@@ -90,6 +90,8 @@ class AgendamentoActivity : AppCompatActivity() {
         }
 
         atualizarValorTotal()
+        btnAgendar.isEnabled = true
+        btnAgendar.text = "Agendar"
 
         btnAgendar.setOnClickListener {
             btnAgendar.setOnClickListener {
@@ -187,6 +189,9 @@ class AgendamentoActivity : AppCompatActivity() {
     }
 
     private fun criarAgendamentoApi(request: AgendamentoRequest) {
+
+        btnAgendar.isEnabled = false
+        btnAgendar.text = "Aguarde..."
 
         val call = AgendamentoProvider.agendamentoApi.criarAgendamento(request)
 

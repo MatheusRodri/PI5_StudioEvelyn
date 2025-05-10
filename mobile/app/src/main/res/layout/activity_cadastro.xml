@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cadastro"
+        android:fontFamily="@font/js_math_cmmi"
         android:textColor="#C30C6B"
         android:textSize="50sp"
         android:layout_marginTop="100dp"

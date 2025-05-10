@@ -17,6 +17,8 @@ import retrofit2.Response
 
 
 class CadastroActivity : AppCompatActivity() {
+    private lateinit var btnCadastrar:Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,7 +30,7 @@ class CadastroActivity : AppCompatActivity() {
         var emailEditText = findViewById<EditText>(R.id.txtEmailNew)
         var passwordEditText = findViewById<EditText>(R.id.txtSenhaNew)
         var passwordConfirmeEditText = findViewById<EditText>(R.id.txtSenhaNewConfirme)
-        var btnCadastrar = findViewById<Button>(R.id.btnSingup)
+        btnCadastrar = findViewById<Button>(R.id.btnSingup)
 
 
         btnCadastrar.setOnClickListener(){
@@ -63,6 +65,9 @@ class CadastroActivity : AppCompatActivity() {
         val nome = "$firstName $lastName"
         val request = CadastroRequest(cpf,nome,email,password)
 
+        btnCadastrar.isEnabled = false
+        btnCadastrar.text = "Aguarde..."
+
         val call =  CadastroProvider.cadastroApi.cadastro(request)
 
 
@@ -76,9 +81,10 @@ class CadastroActivity : AppCompatActivity() {
                 if(response.isSuccessful && response.body() != null){
 
                     handleCadastroSuccess(response.body()!!)
+                    btnCadastrar.isEnabled = true
+                    btnCadastrar.text = "Entrar"
 
                 }else{
-
 
                     try {
                         val errorBody = response.errorBody()?.string()

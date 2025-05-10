@@ -41,8 +41,20 @@ class AgendamentosActivity : AppCompatActivity() {
 
         initRecyclerView()
         setupAgendarButton()
+        setupLogout()
         fetchAgendamentosFromApi()
     }
+
+
+    private fun setupLogout(){
+        binding.btnLogout.setOnClickListener{
+            val intensao = Intent(this,MainActivity::class.java)
+            startActivity(intensao)
+            finish()
+        }
+    }
+
+
 
     private fun setupWhatsAppButton() {
         binding.btnWhatsApp.setOnClickListener {

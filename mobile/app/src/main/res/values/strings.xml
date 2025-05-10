@@ -23,5 +23,6 @@
     <string name="n_o_possui_conta_n_clique_aqui_para_criar_uma">Não possui conta?\n Clique aqui para criar uma.</string>
     <string name="login">LOGIN</string>
     <string name="studio_nevelyn">Studio\nEvelyn</string>
+    <string name="sair">Sair</string>
 
 </resources>

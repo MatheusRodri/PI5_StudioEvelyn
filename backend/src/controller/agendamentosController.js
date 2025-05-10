@@ -29,6 +29,7 @@ servidor.post('/agendamentos', async (req, res) => {
 servidor.post('/agendamentos/cliente', async (req, res) => {
     try {
         const cpf = req.body;
+        console.log(cpf);
         const agendamentos = await exibirAgendamentoCliente(cpf);
         res.status(200).json(agendamentos);
     } catch (error) {

@@ -21,6 +21,9 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var btnEntrar:Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val emailEditText = findViewById<EditText>(R.id.txtEmail)
         val passwordEditText = findViewById<EditText>(R.id.txtPassword)
         val cadastroEditText = findViewById<TextView>(R.id.txtSemLogin)
-        val entrarButton = findViewById<Button>(R.id.btnJoin)
+        btnEntrar = findViewById<Button>(R.id.btnJoin)
 
         PreferenceHelper.init(this)
 
@@ -39,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intensao)
         }
 
-        entrarButton.setOnClickListener {
+        btnEntrar.setOnClickListener {
 
             val emailText = emailEditText.text.toString().trim()
             val passwordText = passwordEditText.text.toString().trim()
@@ -58,6 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleLogin(email:String,password:String){
 
+        btnEntrar.isEnabled = false
+        btnEntrar.text = "Aguarde..."
+
         val request = LoginRequest(email, password)
 
         try {
@@ -72,14 +78,19 @@ class MainActivity : AppCompatActivity() {
 
                     if (response.isSuccessful && response.body() != null) {
                         handleLoginSuccess(response.body()!!)
+                        btnEntrar.isEnabled = true
+                        btnEntrar.text = "Entrar"
                     } else {
                         Log.d(TAG,response.errorBody().toString())
+
                     }
                 }
 
                 override fun onFailure(call: Call<List<LoginResponse>>, t: Throwable) {
                     Log.e(TAG, "Callback onFailure chamado.", t) // Logar a exceção inteira
                     handleNetworkError(t.message ?: "Erro de rede desconhecido")
+                    btnEntrar.isEnabled = true
+                    btnEntrar.text = "Entrar"
                 }
             })
 

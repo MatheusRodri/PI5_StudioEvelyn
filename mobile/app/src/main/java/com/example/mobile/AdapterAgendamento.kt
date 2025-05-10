@@ -10,51 +10,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile.data.model.agendamento.excluir.AgendamentoExcluirRequest
+import com.example.mobile.data.model.agendamento.excluir.AgendamentoExcluirResponse
 import com.example.mobile.data.model.agendamentos.AgendamentosResponse
-import com.google.gson.annotations.SerializedName
-import retrofit2.Call // Import necessário para Call
-import retrofit2.Callback // Import necessário para Callback
-import retrofit2.Response // Import necessário para Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
+import com.example.mobile.data.remote.provider.AgendamentoProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.NumberFormat
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 import java.util.Locale
-
-data class AgendamentoResponseExcluir(
-    val message: String
-)
-
-// Corpo da Requisição para exclusão via @Body (JSON)
-data class ExcluirRequestBody(
-    val ID: Int
-)
-
-// --- Interface da API ---
-// Configurada para enviar o ID em um corpo JSON via @Body
-interface ApiServiceAgendamentoExcluir {
-    @POST("agendamentos/excluir")
-    fun excluirAgendamento(@Body requestBody: ExcluirRequestBody): Call<AgendamentoResponseExcluir>
-
-}
-
-// --- Retrofit Instance ---
-object RetrofitInstanceExcluir {
-    private const val BASE_URL = "http://10.0.2.2:5000/"
-    val api: ApiServiceAgendamentoExcluir by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiServiceAgendamentoExcluir::class.java)
-    }
-}
 
 
 class AdapterAgendamento(
@@ -141,20 +108,22 @@ class AdapterAgendamento(
     }
 
     private fun excluirAgendamentoSimples(context: Context, id: Int, posicao: Int) {
-        val apiService = RetrofitInstanceExcluir.api
-        val request = ExcluirRequestBody(ID = id)
 
-        apiService.excluirAgendamento(request).enqueue(object : Callback<AgendamentoResponseExcluir> {
+
+        val request = AgendamentoExcluirRequest(ID = id)
+        val call = AgendamentoProvider.agendamentoApi.excluirAgendamento(request)
+
+        call.enqueue(object : Callback<AgendamentoExcluirResponse> {
             override fun onResponse(
-                call: Call<AgendamentoResponseExcluir>,
-                response: Response<AgendamentoResponseExcluir>
+                call: Call<AgendamentoExcluirResponse>,
+                response: Response<AgendamentoExcluirResponse>
             ) {
                 val mensagem = response.body()?.message ?: "Agendamento excluído com sucesso!"
                 Toast.makeText(context, mensagem, Toast.LENGTH_SHORT).show()
                 removerItem(posicao)
             }
 
-            override fun onFailure(call: Call<AgendamentoResponseExcluir>, t: Throwable) {
+            override fun onFailure(call: Call<AgendamentoExcluirResponse>, t: Throwable) {
                 Toast.makeText(context, "Erro ao excluir: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
             }
         })

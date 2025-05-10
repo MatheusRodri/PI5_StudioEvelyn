@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Immutable
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.mobile.data.model.agendamento.atualiza.AgendamentoAtualizaRequest
+import com.example.mobile.data.model.agendamento.atualiza.AgendamentoAtualizaResponse
+import com.example.mobile.data.model.agendamento.cria.AgendamentoRequest
+import com.example.mobile.data.remote.provider.AgendamentoProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,38 +73,12 @@ val servicosListAtualizar: List<ServicoAtualizar> = listOf(
     ServicoAtualizar(name = "Labio Natural", price = 250.00)
 )
 
-object NetworkConfigAtualizaAgendamento {
-    private const val BASE_URL = "http://10.0.2.2:5000/"
 
-    val apiService: ApiServiceAtualizaAgendamento by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiServiceAtualizaAgendamento::class.java)
-    }
-
-    interface ApiServiceAtualizaAgendamento {
-        @POST("agendamentos/atualiza")
-        fun atualizarAgendamento(@Body request: AgendamentoAtualizarRequest): Call<AgendamentoAtualizarResponse>
-    }
-
-    data class AgendamentoAtualizarRequest(
-        val ID: Int,
-        val DATA: String,
-        val HORA: String,
-        val PROCEDIMENTO: String,
-        val VALOR: Double,
-        val TP_PAGAMENTO: String,
-        val ID_CLIENT: Int
-    )
-
-    data class AgendamentoAtualizarResponse(
-        val message: String
-    )
-}
 
 class Atualiza_Agendamento_Activity : AppCompatActivity() {
+
+    private lateinit var btnAgendar:Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -160,8 +138,12 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
         val precoInicial = calcularPrecoTotal(obterNomesProcedimentosSelecionadosDoXml())
         textoValor.text = "Total: R$ %.2f".format(precoInicial)
 
-        val btnEditar = findViewById<Button>(R.id.btnAgendarEditar)
-        btnEditar.setOnClickListener {
+        btnAgendar = findViewById<Button>(R.id.btnAgendarEditar)
+
+        btnAgendar.isEnabled = true
+        btnAgendar.text = "Agendar"
+
+        btnAgendar.setOnClickListener {
             val procedimentosSelecionados = obterNomesProcedimentosSelecionadosDoXml()
             val precoTotal = calcularPrecoTotal(procedimentosSelecionados)
             val formaPagamento = when {
@@ -170,7 +152,7 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
                 else -> ""
             }
 
-            val request = NetworkConfigAtualizaAgendamento.AgendamentoAtualizarRequest(
+            val request = AgendamentoAtualizaRequest(
                 ID = id_agendamento,
                 DATA = edtData.text.toString().formatarDataBRparaMySQL(),
                 HORA = edtHora.text.toString(),
@@ -213,13 +195,16 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
         return precoTotal
     }
 
-    private fun atualizaAgendamentoApi(request: NetworkConfigAtualizaAgendamento.AgendamentoAtualizarRequest) {
-        NetworkConfigAtualizaAgendamento.apiService.atualizarAgendamento(request)
-            .enqueue(object :
-                Callback<NetworkConfigAtualizaAgendamento.AgendamentoAtualizarResponse> {
+    private fun atualizaAgendamentoApi(request: AgendamentoAtualizaRequest) {
+        btnAgendar.isEnabled = false
+        btnAgendar.text = "Aguarde..."
+
+        val call = AgendamentoProvider.agendamentoApi.atualizarAgendamento(request)
+
+            call.enqueue(object :Callback<AgendamentoAtualizaResponse> {
                 override fun onResponse(
-                    call: Call<NetworkConfigAtualizaAgendamento.AgendamentoAtualizarResponse>,
-                    response: Response<NetworkConfigAtualizaAgendamento.AgendamentoAtualizarResponse>
+                    call: Call<AgendamentoAtualizaResponse>,
+                    response: Response<AgendamentoAtualizaResponse>
                 ) {
                     if (response.isSuccessful && response.body() != null) {
                         Toast.makeText(this@Atualiza_Agendamento_Activity, "Agendamento atualizado com sucesso!", Toast.LENGTH_SHORT).show()
@@ -232,7 +217,7 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
                 }
 
                 override fun onFailure(
-                    call: Call<NetworkConfigAtualizaAgendamento.AgendamentoAtualizarResponse>,
+                    call: Call<AgendamentoAtualizaResponse>,
                     t: Throwable
                 ) {
                     Log.e("API_FAILURE", "Falha: ${t.message}", t)
