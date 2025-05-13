@@ -1,6 +1,8 @@
 package com.example.mobile
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
@@ -100,6 +102,9 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
 
         val chkPix = findViewById<RadioButton>(R.id.chkPixEditar)
         val chkCartao = findViewById<RadioButton>(R.id.chkCartaoEditar)
+
+        aplicarMascaraData(edtData)
+        aplicarMascaraHora(edtHora)
 
         val checkboxes = listOf(
             R.id.cbDesignEditar,
@@ -224,5 +229,62 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
                     Toast.makeText(this@Atualiza_Agendamento_Activity, "Falha na conexão: ${t.message}", Toast.LENGTH_LONG).show()
                 }
             })
+    }
+    fun aplicarMascaraData(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating || s == null) return
+
+                val texto = s.toString().filter { it.isDigit() }
+                val builder = StringBuilder()
+
+                var i = 0
+                while (i < texto.length && i < 8) {
+                    builder.append(texto[i])
+                    if (i == 1 || i == 3) builder.append('/')
+                    i++
+                }
+
+                isUpdating = true
+                editText.setText(builder.toString())
+                editText.setSelection(builder.length.coerceAtMost(editText.text.length))
+                isUpdating = false
+            }
+        })
+    }
+
+    fun aplicarMascaraHora(editText: EditText) {
+        editText.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating || s == null) return
+
+                val texto = s.toString().filter { it.isDigit() }
+                val builder = StringBuilder()
+
+                var i = 0
+                while (i < texto.length && i < 4) {
+                    builder.append(texto[i])
+                    if (i == 1) builder.append(':')
+                    i++
+                }
+
+                isUpdating = true
+                editText.setText(builder.toString())
+                editText.setSelection(builder.length.coerceAtMost(editText.text.length))
+                isUpdating = false
+            }
+        })
     }
 }
