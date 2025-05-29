@@ -124,7 +124,13 @@ class AgendamentoActivity : AppCompatActivity() {
                     if (utilDate == null || utilTime == null) throw ParseException("Formato inválido", 0)
 
                     // ✅ Validação 1: Data não pode ser anterior ao dia atual
-                    val hoje = Calendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0) }.time
+                    val hoje = Calendar.getInstance().apply {
+                        set(Calendar.HOUR_OF_DAY, 0)
+                        set(Calendar.MINUTE, 0)
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND,0)
+                    }.time
+                    Log.d("TagTeste",hoje.toString())
                     if (utilDate.before(hoje)) {
 
                         Toast.makeText(this,"A data deve ser hoje ou posterior.",Toast.LENGTH_LONG).show()

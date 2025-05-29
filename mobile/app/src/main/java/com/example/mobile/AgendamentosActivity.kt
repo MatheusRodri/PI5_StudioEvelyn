@@ -15,6 +15,7 @@ import com.example.mobile.data.local.PreferenceHelper
 import com.example.mobile.data.model.agendamentos.AgendamentosRequest
 import com.example.mobile.data.remote.provider.AgendamentosProvider
 import com.example.mobile.databinding.ActivityAgendamentosBinding
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -37,7 +38,7 @@ class AgendamentosActivity : AppCompatActivity() {
         clienteId = PreferenceHelper.idCliente.toString()
 
         setupWhatsAppButton()
-        Log.d("AgendamentosActivity", "CPF Recebido: $clienteCpf\nID cliente: $clienteId")
+        Log.d("TESTE_AGENDAMENTO", "CPF Recebido: $clienteCpf\nID cliente: $clienteId")
 
         initRecyclerView()
         setupAgendarButton()
@@ -47,7 +48,10 @@ class AgendamentosActivity : AppCompatActivity() {
 
 
     private fun setupLogout(){
-        binding.btnLogout.setOnClickListener{
+        binding.btnSair.setOnClickListener{
+
+            PreferenceHelper.removeCpf()
+            PreferenceHelper.removeIdCliente()
             val intensao = Intent(this,MainActivity::class.java)
             startActivity(intensao)
             finish()
@@ -93,6 +97,8 @@ class AgendamentosActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val response = AgendamentosProvider.agendamentosApi.getagendamentos(request)
+                Log.d("AGENDAMENTO_DEBUG", Gson().toJson(response))
+
                 adapterAgendamento.updateData(response)
                 binding.progressBar.isVisible = false
                 binding.idAgendamentos.isVisible = true

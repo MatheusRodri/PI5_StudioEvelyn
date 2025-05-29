@@ -23,6 +23,8 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnEntrar:Button
+    private lateinit var clienteId: String
+    private lateinit var clienteCpf: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,17 @@ class MainActivity : AppCompatActivity() {
         btnEntrar = findViewById<Button>(R.id.btnJoin)
 
         PreferenceHelper.init(this)
+
+        clienteCpf = PreferenceHelper.cpf.toString()
+        clienteId = PreferenceHelper.idCliente.toString()
+
+        Log.d("teste","${clienteId} ${clienteCpf}" )
+        if (clienteId.toInt() > 0 && !clienteCpf.isNullOrEmpty()){
+
+            val intensao = Intent(this,AgendamentosActivity::class.java)
+            startActivity(intensao)
+            finish()
+        }
 
         cadastroEditText.setOnClickListener {
             val intensao = Intent(this,CadastroActivity::class.java)

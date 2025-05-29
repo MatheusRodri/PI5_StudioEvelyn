@@ -8,6 +8,18 @@
     android:background="@drawable/linear_background"
     tools:context=".AgendamentosActivity">
 
+    <Button
+        android:id="@+id/btnSair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginRight="25dp"
+        android:text="Sair"
+        android:backgroundTint="#CE1919"
+        app:layout_constraintBottom_toTopOf="@+id/idAgendamentos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 
@@ -28,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="65dp"
         android:layout_marginBottom="1dp"
+        android:layout_marginRight="250dp"
         android:text="@string/agendar"
         android:backgroundTint="#C30C6B"
         app:layout_constraintBottom_toTopOf="@+id/idAgendamentos"
@@ -62,16 +75,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/btnLogout"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_logout"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+
 
     <ImageView
         android:id="@+id/btnWhatsApp"

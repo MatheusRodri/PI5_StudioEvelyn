@@ -11,3 +11,5 @@ interface CadastroApi {
     @POST("cliente")
     fun cadastro(@Body request: CadastroRequest): Call<CadastroResponse>
 }
+
+

@@ -19,4 +19,21 @@ object PreferenceHelper {
     var idCliente: Int
         get() = prefs.getInt("ID_CLIENTE", -1)
         set(value) = prefs.edit().putInt("ID_CLIENTE", value).apply()
+
+    fun removeCpf() {
+        // Verifica se 'prefs' foi inicializada para evitar exceções.
+        // Essencial se houver chance de chamar antes de init().
+        if (::prefs.isInitialized) {
+            prefs.edit().remove("CPF").apply()
+        }
+    }
+
+    /**
+     * Remove apenas o ID do Cliente das SharedPreferences.
+     */
+    fun removeIdCliente() {
+        if (::prefs.isInitialized) {
+            prefs.edit().remove("ID_CLIENTE").apply()
+        }
+    }
 }

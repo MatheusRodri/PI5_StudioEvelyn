@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile.data.local.PreferenceHelper
 import com.example.mobile.data.model.agendamento.excluir.AgendamentoExcluirRequest
 import com.example.mobile.data.model.agendamento.excluir.AgendamentoExcluirResponse
 import com.example.mobile.data.model.agendamentos.AgendamentosResponse
@@ -26,6 +27,8 @@ import java.util.Locale
 
 class AdapterAgendamento(
     private var agendamentos: List<AgendamentosResponse>
+
+
 ) : RecyclerView.Adapter<AdapterAgendamento.AgendamentoViewHolder>() {
 
     class AgendamentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -51,22 +54,25 @@ class AdapterAgendamento(
         holder.nomeAgendamento.text = agendamento.PROCEDIMENTO ?: "Procedimento não informado"
         holder.dataHoraValor.text = "Data: $dataFormatada\nHora: $horaFormatada\nValor: $valorFormatado"
 
+
+        var clienteId = PreferenceHelper.idCliente.toString()
+
         holder.btnExcluir.setOnClickListener {
             excluirAgendamentoSimples(it.context, agendamento.ID_AGENDAMENTO, position)
         }
 
         holder.btnAlterar.setOnClickListener {
             var intensao = Intent(it.context, Atualiza_Agendamento_Activity::class.java)
-            intensao.putExtra("ID_AGENDAMENTO",agendamento.ID_AGENDAMENTO)
+            intensao.putExtra("ID_AGENDAMENTO",agendamento.ID)
             intensao.putExtra("NOME_PROCEDIMENTO",agendamento.PROCEDIMENTO)
             intensao.putExtra("HORA_AGENDAMENTO",agendamento.HORA)
             intensao.putExtra("DATA_AGENDAMENTO",agendamento.DATA)
             intensao.putExtra("VALOR_TOTAL",agendamento.VALOR)
             intensao.putExtra("FORMA_PAGAMENTO_AGENDAMENTO",agendamento.TP_PAGAMENTO)
-            intensao.putExtra("ID_CLIENTE",agendamento.ID_CLIENTE)
+            intensao.putExtra("ID_CLIENTE",clienteId)
 
 
-            Log.d("Atualiza","id agendamento: ${agendamento.ID_AGENDAMENTO}\nid_cliente ${agendamento.ID_CLIENTE}")
+            Log.d("btnAlterar","id agendamento: ${agendamento.ID}\nid_cliente ${clienteId}")
 
             it.context.startActivity(intensao)
         }
@@ -109,8 +115,8 @@ class AdapterAgendamento(
 
     private fun excluirAgendamentoSimples(context: Context, id: Int, posicao: Int) {
 
-
-        val request = AgendamentoExcluirRequest(ID = id)
+        Log.d("teste",id.toString())
+        val request = AgendamentoExcluirRequest(id)
         val call = AgendamentoProvider.agendamentoApi.excluirAgendamento(request)
 
         call.enqueue(object : Callback<AgendamentoExcluirResponse> {

@@ -9,10 +9,6 @@
     android:background="@drawable/linear_background"
     tools:context=".MainActivity">
 
-    <!-- Título -->
-
-    <!-- Subtítulo Login -->
-
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
@@ -20,7 +16,7 @@
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:text="@string/studio_nevelyn"
-        android:fontFamily="@font/js_math_cmmi"
+        android:fontFamily="@font/gabriola"
         android:textColor="#A80063"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
@@ -34,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:fontFamily="@font/js_math_cmmi"
+        android:fontFamily="@font/gabriola"
         android:text="@string/login"
         android:textColor="#FFFFFF"
         android:textSize="40sp"
@@ -78,9 +74,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
-    <!-- Botão Entrar -->
-
-    <!-- Texto de link para criar conta -->
 
     <Button
         android:id="@+id/btnJoin"

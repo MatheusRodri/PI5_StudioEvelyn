@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Immutable
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.mobile.data.local.PreferenceHelper
 import com.example.mobile.data.model.agendamento.atualiza.AgendamentoAtualizaRequest
 import com.example.mobile.data.model.agendamento.atualiza.AgendamentoAtualizaResponse
 import com.example.mobile.data.model.agendamento.cria.AgendamentoRequest
@@ -87,7 +88,7 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
         setContentView(R.layout.activity_atualiza_agendamento)
 
         val id_agendamento = intent.getIntExtra("ID_AGENDAMENTO", -1)
-        val id_cliente = intent.getIntExtra("ID_CLIENTE", -1)
+        val id_cliente = PreferenceHelper.idCliente.toString()
         val nome_agendamento = intent.getStringExtra("NOME_PROCEDIMENTO")
         val hora_agendamento = intent.getStringExtra("HORA_AGENDAMENTO")
         val data_agendamento = intent.getStringExtra("DATA_AGENDAMENTO")
@@ -164,7 +165,7 @@ class Atualiza_Agendamento_Activity : AppCompatActivity() {
                 PROCEDIMENTO = procedimentosSelecionados.joinToString(", "),
                 VALOR = precoTotal,
                 TP_PAGAMENTO = formaPagamento,
-                ID_CLIENT = id_cliente
+                ID_CLIENT = id_cliente.toInt()
             )
 
             atualizaAgendamentoApi(request)
