@@ -25,10 +25,10 @@
         android:text="@string/agendamento"
         android:textColor="#C30C6B"
         android:textSize="35sp"
-        android:fontFamily="@font/js_math_cmmi"
+        android:fontFamily="@font/gabriola"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <EditText
         android:id="@+id/dataAgendamentoEditar"
@@ -83,15 +83,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textoProcedimentoEditar" />
 
-    <CheckBox android:id="@+id/cbBrasileiroEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brasileiro" />
-    <CheckBox android:id="@+id/cbComboEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Combo" />
-    <CheckBox android:id="@+id/cbDesignEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Design" />
-    <CheckBox android:id="@+id/cbFoxEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fox" />
-    <CheckBox android:id="@+id/cbHennaEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Henna" />
-    <CheckBox android:id="@+id/cbHibridoEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hibrido" />
-    <CheckBox android:id="@+id/cbLabioEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Labio" />
-    <CheckBox android:id="@+id/cbMegaEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mega" />
-    <CheckBox android:id="@+id/cbNaturalEditar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Natural" />
+    <CheckBox android:id="@+id/cbBrasileiroEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brasileiro" />
+    <CheckBox android:id="@+id/cbComboEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Combo" />
+    <CheckBox android:id="@+id/cbDesignEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Design" />
+    <CheckBox android:id="@+id/cbFoxEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fox" />
+    <CheckBox android:id="@+id/cbHennaEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Henna" />
+    <CheckBox android:id="@+id/cbHibridoEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hibrido" />
+    <CheckBox android:id="@+id/cbLabioEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Labio" />
+    <CheckBox android:id="@+id/cbMegaEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mega" />
+    <CheckBox android:id="@+id/cbNaturalEditar" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Natural" />
     <!--        <CheckBox android:id="@+id/cbShadow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shadow\nR$280,00" />-->
     <!--        <CheckBox android:id="@+id/cbRusso" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Russo\nR$150,00" />-->
     <!--        <CheckBox android:id="@+id/cbCompleto" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completo\nR$200,00" />-->
@@ -105,8 +105,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/forma_de_pagamento"
-        android:textColor="#C30C6B"
-        android:textSize="25sp"
+        android:textColor="#050003"
+        android:textSize="35sp"
+        android:fontFamily="@font/gabriola"
         app:layout_constraintTop_toBottomOf="@id/flowCheckboxesEditar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -123,6 +124,8 @@
         <RadioButton
             android:id="@+id/chkCartaoEditar"
             android:layout_width="150dp"
+            android:buttonTint="@color/black"
+            android:textColor="@color/black"
             android:layout_height="wrap_content"
             android:text="Cartão de crédito"
             app:layout_constraintTop_toBottomOf="@id/textoFormaDePagamentoEditar"
@@ -133,6 +136,8 @@
             android:id="@+id/chkPixEditar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/black"
+            android:textColor="@color/black"
             android:text="Pix"
             app:layout_constraintTop_toBottomOf="@id/textoFormaDePagamentoEditar"
             app:layout_constraintEnd_toEndOf="parent"

@@ -83,15 +83,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textoProcedimento" />
 
-        <CheckBox android:id="@+id/cbBrasileiro" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brasileiro" />
-        <CheckBox android:id="@+id/cbCombo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Combo" />
-        <CheckBox android:id="@+id/cbDesign" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Design" />
-        <CheckBox android:id="@+id/cbFox" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fox" />
-        <CheckBox android:id="@+id/cbHenna" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Henna" />
-        <CheckBox android:id="@+id/cbHibrido" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hibrido" />
-        <CheckBox android:id="@+id/cbLabio" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Labio" />
-        <CheckBox android:id="@+id/cbMega" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mega" />
-        <CheckBox android:id="@+id/cbNatural" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Natural" />
+        <CheckBox android:id="@+id/cbBrasileiro" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brasileiro" />
+        <CheckBox android:id="@+id/cbCombo" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Combo" />
+        <CheckBox android:id="@+id/cbDesign" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Design" />
+        <CheckBox android:id="@+id/cbFox" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fox" />
+        <CheckBox android:id="@+id/cbHenna" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Henna" />
+        <CheckBox android:id="@+id/cbHibrido" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hibrido" />
+        <CheckBox android:id="@+id/cbLabio" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Labio" />
+        <CheckBox android:id="@+id/cbMega" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mega" />
+        <CheckBox android:id="@+id/cbNatural" android:buttonTint="@color/black" android:textColor="@color/black" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Natural" />
 <!--        <CheckBox android:id="@+id/cbShadow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shadow\nR$280,00" />-->
 <!--        <CheckBox android:id="@+id/cbRusso" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Russo\nR$150,00" />-->
 <!--        <CheckBox android:id="@+id/cbCompleto" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completo\nR$200,00" />-->
@@ -125,6 +125,8 @@
             android:id="@+id/chkCartao"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/black"
+            android:textColor="@color/black"
             android:text="Cartão de crédito"
             app:layout_constraintTop_toBottomOf="@id/textoFormaDePagamento"
             app:layout_constraintStart_toStartOf="parent"
@@ -135,6 +137,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pix"
+            android:buttonTint="@color/black"
+            android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/textoFormaDePagamento"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"/>
@@ -144,6 +148,7 @@
             android:id="@+id/textoValorDinamico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="Total: R$0,00"
             android:textSize="20sp"
             android:layout_marginTop="24dp"
@@ -156,11 +161,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/agendar"
+            android:layout_marginBottom="50dp"
             android:backgroundTint="#C30C6B"
-            app:layout_constraintTop_toBottomOf="@id/textoValorDinamico"
+            android:text="@string/agendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/textoValorDinamico" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

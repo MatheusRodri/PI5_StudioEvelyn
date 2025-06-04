@@ -12,11 +12,12 @@
         android:id="@+id/textViewCadastro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cadastro"
+        android:layout_marginTop="100dp"
         android:fontFamily="@font/gabriola"
+        android:text="@string/cadastro"
         android:textColor="#C30C6B"
         android:textSize="50sp"
-        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtFirstName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -101,7 +102,7 @@
         android:textSize="25sp"
         android:textColor="@color/black"
         android:fontFamily="@font/gabriola"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

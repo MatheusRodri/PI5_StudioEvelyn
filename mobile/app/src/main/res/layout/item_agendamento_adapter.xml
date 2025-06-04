@@ -22,7 +22,7 @@
         android:id="@+id/idDataHorarioValor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="35dp"
         android:text="TextView"
         android:textColor="#C30C6B"
